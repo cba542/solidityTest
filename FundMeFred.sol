@@ -27,11 +27,13 @@ contract FundMe{
     }
 
     function Fund() public payable{
-        require(convertEthToUsd(msg.value) > minimumUSB, "must greater that 1e");
+        // require(convertEthToUsd(msg.value) > minimumUSB, "must greater that 1e");
     }
 
-    function withdraw() view public {
+    function withdraw() public {
         require(msg.sender == owner, "not contract developer");
+
+        payable(msg.sender).transfer(address(this).balance);
     }
 
     /**
