@@ -7,6 +7,9 @@ contract PeopleRegistry {
         string name;
     }
 
+    mapping (string => uint) public nameToAge;
+    mapping (string => uint) public nameToIndex;
+
     People[] public person;
 
     constructor(){
@@ -22,6 +25,9 @@ contract PeopleRegistry {
     
     function addPerson(uint _age, string memory _name) public {
         person.push(People(_age,_name));
+        nameToAge[_name] = _age;
+        uint index = (person.length  - 1);
+        nameToIndex[_name] = index;
     }
 
 }
