@@ -10,6 +10,8 @@ contract FundMe{
     address public owner;
 
     uint minimumUSB = 10;
+
+    address[] public funders;
     constructor(){
         owner = msg.sender;
 
@@ -28,12 +30,20 @@ contract FundMe{
 
     function Fund() public payable{
         // require(convertEthToUsd(msg.value) > minimumUSB, "must greater that 1e");
+
+        funders.push(msg.sender);
     }
 
     function withdraw() public {
         require(msg.sender == owner, "not contract developer");
 
-        payable(msg.sender).transfer(address(this).balance);
+        //Transfer and send gas fee limited to 2300
+        // payable(msg.sender).transfer(address(this).balance);
+        // bool sendPASS = payable(msg.sender).send(address(this).balance);
+        // require(sendPASS, "transaction failed");
+
+        (bool callPass,) = payable(msg.sender).call{value:address(this).balance}("");
+        require(callPass, "transaction failed");
     }
 
     /**
